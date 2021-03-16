@@ -19,7 +19,8 @@ Your task in this problem is to run the dynamic programming algorithm (and the r
 The question is: of the vertices 1, 2, 3, 4, 17, 117, 517, and 997, which ones belong to the maximum-weight independent set?
 (By "vertex 1" we mean the first vertex of the graph---there is no vertex 0.)
 In the box below, enter a 8-bit string, where the ith bit should be 1 if the ith of these 8 vertices is in the maximum-weight independent set, and 0 otherwise.
-For example, if you think that the vertices 1, 4, 17, and 517 are in the maximum-weight independent set and the other four vertices are not, then you should enter the string 10011010 in the box below.
+For example, if you think that the vertices 1, 4, 17, and 517 are in the maximum-weight independent set and the other four vertices are not, 
+then you should enter the string 10011010 in the box below.
 */
 #include <iostream>
 #include <fstream>
@@ -49,7 +50,7 @@ void data_input(vector<int>& vs, string& filename) {
 int main()
 {
     vector<int> vertices;
-    vector<string> files{ "mwis.txt", "test1.txt","test2.txt" };
+    vector<string> files{"mwis.txt", "test1.txt","test2.txt"};
     vector<vector<int>> indices{{ 1, 2, 3, 4, 17, 117, 517, 997 },{ 1,2,3,4 }, { 1,2,3,4,5,6,7,8,9,10 }};
 
     int j = 0; //jth file as input data
