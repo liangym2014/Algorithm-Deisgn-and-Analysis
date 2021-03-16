@@ -72,16 +72,6 @@ public:
       }
       file.close();
     }
-
-    /*
-    for (int i = 1; i < vertices.size(); ++i) {
-      cout << "vertex " << i << ": ";
-      for (auto& edge : vertices[i].edges) {
-        cout << "[" << edge.first << "," << edge.second << "],";
-      }
-      cout << endl;
-    }
-    */
   }
 
 
@@ -105,17 +95,17 @@ public:
         break;
     }
 
-    return change; //true for negative cycle exists
+    return change; //return true for negative cycle exists
   }
 
   long Dijkstra_Algorithm(int source) {
-    //set a big initial value to all the distances
+    //assign a large initial value to all the distances
     for (auto& v: vertices) {
       v.distance = INT_MAX;
       v.visited = false;
     }
 
-    //set source distance as 0
+    //set source distance = 0
     vertices[source].distance = 0;
     vector<pair<long, int>> heap = { {0, source} }; //{distance, index}
 
@@ -135,7 +125,7 @@ public:
 
         if (d < vertices[edge.first].distance) {
           vertices[edge.first].distance = d;
-          heap.push_back({ d, edge.first });
+          heap.push_back({d, edge.first});
           push_heap(heap.begin(), heap.end(), cmp);
         }
       }
