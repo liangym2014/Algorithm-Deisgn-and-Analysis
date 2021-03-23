@@ -33,6 +33,7 @@ class Graph {
 private:
     vector<pair<int,int>> edges;
     vector<int> unions;  //0: undefined, >= 0: defined
+    vector<int> random_edge_order;
     int n;  //number of nodes
     
 
@@ -55,7 +56,7 @@ public:
                 while (pos != string::npos) {
                     int node2 = stoi(line.substr(start, pos - start));
                     if(node1 < node2)
-                        edges.push_back({node1, node2});    //node1 < node2, remove self-loop and duplicate edges
+                        edges.push_back({node1, node2}); //node1 < node2, remove self-loop and duplicate edges
                     start = pos + 1;
                     pos = line.find('\t', start);
                 }
@@ -103,19 +104,17 @@ public:
         }
     }
 
-    pair<int, int> pick_random_edge(int &edge_num) {
-        int rand_idx = rand() % (1 + edge_num);
-        swap(edges[rand_idx], edges[edge_num]); //randomly pick an edge in selectable range [0 ~ edge_num], swap it and edges[edge_num]
-        return edges[edge_num --];  //selectable range decrease by 1
-    }
-
-
-    int RandomizedContracted(int edge_num) {
+    int RandomizedContracted() {
         int remain = n;  //the number of remaining nodes
         unions = vector<int>(n + 1);
+        
+        //rearrange random_edge_order
+        random_shuffle(random_edge_order.begin(), random_edge_order.end());
+
+        int edge = 0;
 
         while (remain > 2) {
-            pair<int, int> rand_edge = pick_random_edge(edge_num);
+            pair<int, int> rand_edge = edges[random_edge_order[edge ++]];
 
             int node1 = rand_edge.first, node2 = rand_edge.second;
             int node1_union_idx = find_union(unions[node1]);
@@ -128,8 +127,8 @@ public:
 
         int count = 0; //the number of cross edges
 
-        while (edge_num >= 0) {
-            pair<int, int> rand_edge = pick_random_edge(edge_num);
+        while (edge < random_edge_order.size()) {
+            pair<int, int> rand_edge = edges[random_edge_order[edge ++]];
 
             int node1 = rand_edge.first, node2 = rand_edge.second;
             int node1_union_idx = find_union(unions[node1]);
@@ -148,11 +147,16 @@ public:
     }
 
     int RepeatRandomizedContracted() {
-        int last_edge_index = edges.size() - 1, i = n * n * log(n);
-        int minCut = RandomizedContracted(last_edge_index);
+        int i = n * n * log(n);
+
+        //indices from 0 to edges.size() - 1
+        for (int j = 0; j < edges.size(); ++j)
+            random_edge_order.push_back(j);
+
+        int minCut = RandomizedContracted();
         //cout << i << endl;
         while (-- i) {
-            int cut = RandomizedContracted(last_edge_index);
+            int cut = RandomizedContracted();
             //cout<<cut<<endl;
             if (cut < minCut) 
                 minCut = cut;
@@ -167,7 +171,7 @@ int main()
 {
     vector<string> file{ "kargerMinCut.txt", "test.txt"};
     vector<int> num_nodes = { 200, 8 };
-    int i = 1;
+    int i = 0;
 
     Graph graph(file[i], num_nodes[i]);
     cout << graph.RepeatRandomizedContracted() << endl;
