@@ -26,7 +26,6 @@ Can you use that structure to speed up your algorithm?
 #include <fstream>
 #include <cmath>
 #include <vector>
-//#include <algorithm>
 #include <unordered_map>
 
 using namespace std;
@@ -43,7 +42,7 @@ typedef unordered_map<mask_type,map_value> umap;
 
 class TSP {
 private:
-    vector<vector<length>> distance;  //city coordinates and distances
+    vector<vector<length>> distance;  //distance between cities
     int num_cities;  //number of cities
 
 public:
